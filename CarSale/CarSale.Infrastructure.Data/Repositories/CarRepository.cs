@@ -1,24 +1,25 @@
-﻿using CarSale.Core.Application_Service.Interface;
-using CarSale.Core.Domain_Service.Interface;
+﻿using CarSale.Core.Domain_Service.Interface;
 using CarSale.Core.Entity.Entity;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CarSale.Core.Application_Service.Service
+namespace CarSale.Infrastructure.Data.Repositories
 {
-    public class CarService : ICarService
+    public class CarRepository : ICarRepository
     {
-        private readonly ICarRepository _carRepo;
+        private CarSaleContext _ctx;
 
-        public CarService(ICarRepository carRepository)
+        public CarRepository(CarSaleContext ctx)
         {
-            _carRepo = carRepository;
+            _ctx = ctx;
         }
 
         public Car CreateCar(Car car)
         {
-            return _carRepo.CreateCar(car);
+            var newCar = _ctx.Add(car);
+            _ctx.SaveChanges();
+            return newCar.Entity;
         }
 
         public Car DeleteCar(int id)
@@ -26,12 +27,12 @@ namespace CarSale.Core.Application_Service.Service
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Car> GetAllCars()
+        public IEnumerable<Car> ReadAllCars()
         {
-            return _carRepo.ReadAllCars();
+            return _ctx.Cars;
         }
 
-        public Car GetCarById(int id)
+        public Car ReadCarById(int id)
         {
             throw new NotImplementedException();
         }

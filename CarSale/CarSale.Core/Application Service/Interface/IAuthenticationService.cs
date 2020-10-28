@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CarSale.Core.Application_Service.Interface
 {
-    public class AuthenticationService
+    public interface IAuthenticationService
     {
     }
 }
