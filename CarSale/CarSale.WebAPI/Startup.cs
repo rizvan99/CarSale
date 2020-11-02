@@ -37,7 +37,7 @@ namespace CarSale.WebAPI
             // DATABASE
             services.AddDbContext<CarSaleContext>
                 (
-                    opt => opt.UseSqlite("Data Source=carsale.db").EnableSensitiveDataLogging(), ServiceLifetime.Transient
+                    opt => opt.UseSqlite("Data Source=carsale.db").EnableSensitiveDataLogging().EnableSensitiveDataLogging(), ServiceLifetime.Transient
                 );
 
 
