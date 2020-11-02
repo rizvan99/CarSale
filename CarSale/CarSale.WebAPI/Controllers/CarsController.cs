@@ -31,27 +31,78 @@ namespace CarSale.WebAPI.Controllers
 
         // GET api/<CarsController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public ActionResult<Car> Get(int id)
         {
-            return "value";
+            var car = _carService.GetCarById(id);
+
+            if (id < 0)
+            {
+                return BadRequest("Id must be greater than 0");
+            }
+
+            if (car == null)
+            {
+                return StatusCode(404, $"Car with id {id} not found");
+            }
+
+            return StatusCode(200, car);
         }
 
         // POST api/<CarsController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public ActionResult<Car> Post([FromBody] Car car)
         {
+            try
+            {
+                if (string.IsNullOrEmpty(car.Name))
+                {
+                    return BadRequest("Must specify name for car");
+                }
+                if (string.IsNullOrEmpty(car.Brand))
+                {
+                    return BadRequest("Must specify brand for car");
+                }
+                if (car.Price <= 0)
+                {
+                    return BadRequest("Must specify price for car");
+                }
+
+                return StatusCode(201, _carService.CreateCar(car));
+
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         // PUT api/<CarsController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public ActionResult<Car> Put(int id, [FromBody] Car car)
         {
+            if (id < 0 || id != car.Id)
+            {
+                return BadRequest($"Car with id {id} not found");
+            }
+
+            return _carService.UpdateCar(car);
+
         }
 
         // DELETE api/<CarsController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public ActionResult<Car> Delete(int id)
         {
+            try
+            {
+                var carDelete = _carService.DeleteCar(id);
+                return Ok($"Car with id {id} has been deleted");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
         }
     }
 }

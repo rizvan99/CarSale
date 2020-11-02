@@ -3,6 +3,7 @@ using CarSale.Core.Domain_Service.Interface;
 using CarSale.Core.Entity.Entity;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace CarSale.Core.Application_Service.Service
@@ -23,7 +24,11 @@ namespace CarSale.Core.Application_Service.Service
 
         public Car DeleteCar(int id)
         {
-            throw new NotImplementedException();
+            if (_carRepo.DeleteCar(id) == null || id <= 0)
+            {
+                throw new InvalidDataException("Car not found");
+            }
+            return _carRepo.DeleteCar(id);
         }
 
         public IEnumerable<Car> GetAllCars()
@@ -33,12 +38,12 @@ namespace CarSale.Core.Application_Service.Service
 
         public Car GetCarById(int id)
         {
-            throw new NotImplementedException();
+            return _carRepo.ReadCarById(id);
         }
 
         public Car UpdateCar(Car carToUpdate)
         {
-            throw new NotImplementedException();
+            return _carRepo.UpdateCar(carToUpdate);
         }
     }
 }

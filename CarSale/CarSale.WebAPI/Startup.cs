@@ -7,6 +7,7 @@ using CarSale.Core.Application_Service.Service;
 using CarSale.Core.Domain_Service.Interface;
 using CarSale.Infrastructure.Data;
 using CarSale.Infrastructure.Data.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -16,6 +17,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 
 namespace CarSale.WebAPI
 {
@@ -32,16 +34,46 @@ namespace CarSale.WebAPI
         public void ConfigureServices(IServiceCollection services)
         {
 
-            //DATABASE
+            // DATABASE
             services.AddDbContext<CarSaleContext>
                 (
                     opt => opt.UseSqlite("Data Source=carsale.db").EnableSensitiveDataLogging(), ServiceLifetime.Transient
                 );
 
 
-            //Avoid reference loop
+            // AAVOID REFERENCE LOOP
             services.AddControllers().AddNewtonsoftJson
                 (x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+
+
+            // LOGIN AUTHENTICATION
+            Byte[] secretBytes = new byte[40];
+            Random rand = new Random();
+            rand.NextBytes(secretBytes);
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateAudience = false,
+                    //ValidAudience = "TodoApiClient",
+                    ValidateIssuer = false,
+                    //ValidIssuer = "TodoApi",
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(secretBytes),
+                    ValidateLifetime = true, //validate the expiration and not before values in the token
+                    ClockSkew = TimeSpan.FromMinutes(5) //5 minute tolerance for the expiration date
+                };
+            });
+
+
+            // SWAGGER
+            //To be done
+
+
+            // CROSS-ORIGIN RESOURCE SHARING
+            services.AddCors();
 
 
             services.AddScoped<ICarRepository, CarRepository>();
@@ -62,6 +94,16 @@ namespace CarSale.WebAPI
                     //DBInitializer.SeedDB(ctx);
                 }
             }
+
+            app.UseCors(builder =>
+            {
+                builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+            });
+
+            app.UseAuthentication();
 
             app.UseHttpsRedirection();
 

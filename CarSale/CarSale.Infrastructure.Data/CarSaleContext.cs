@@ -1,4 +1,5 @@
 ﻿using CarSale.Core.Entity.Entity;
+using CarSale.Core.Entity.Login;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,8 @@ namespace CarSale.Infrastructure.Data
         }
 
         public DbSet<Car> Cars { get; set; }
+
+        public DbSet<User> Users { get; set; }
 
 
     }
