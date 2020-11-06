@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CarSale.WebAPI.Controllers
 {
-    [Route("/login")]
+    [Route("/token")]
     public class LoginController : Controller
     {
         private IUserRepository userRepository;

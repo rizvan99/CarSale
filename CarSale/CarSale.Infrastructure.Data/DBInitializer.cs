@@ -1,18 +1,53 @@
-﻿using CarSale.Core.Entity.Entity;
+﻿using CarSale.Core.Application_Service.Interface;
+using CarSale.Core.Entity.Entity;
+using CarSale.Core.Entity.Login;
+using Microsoft.EntityFrameworkCore.Internal;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace CarSale.Infrastructure.Data
 {
-    public class DBInitializer
+    public class DBInitializer : IDBInitializer
     {
+        private readonly IAuthenticationService _authService;
+        public DBInitializer(IAuthenticationService aut)
+        {
+            _authService = aut;
+        }
+
         public void SeedDB(CarSaleContext ctx)
         {
+            
+
             //To avoid duplicate seeding
             ctx.Database.EnsureDeleted();
             ctx.Database.EnsureCreated();
 
+            
+
+            //Users
+            string password = "1234";
+            byte[] passwordHashJoe, passwordSaltJoe, passwordHashAnn, passwordSaltAnn;
+            _authService.CreatePasswordHash(password, out passwordHashJoe, out passwordSaltJoe);
+            _authService.CreatePasswordHash(password, out passwordHashAnn, out passwordSaltAnn);
+
+            List<User> users = new List<User>
+            {
+                new User {
+                    Username = "UserJoe",
+                    PasswordHash = passwordHashJoe,
+                    PasswordSalt = passwordSaltJoe,
+                    IsAdmin = false
+                },
+                new User {
+                    Username = "AdminAnn",
+                    PasswordHash = passwordHashAnn,
+                    PasswordSalt = passwordSaltAnn,
+                    IsAdmin = true
+                }
+            };
+            ctx.Users.AddRange(users);
 
             var car1 = new Car()
             {
@@ -50,7 +85,7 @@ namespace CarSale.Infrastructure.Data
             ctx.Cars.Add(car3);
 
 
-            //Saving after adding all cars
+            //Saving after adding all
             ctx.SaveChanges();
 
         }

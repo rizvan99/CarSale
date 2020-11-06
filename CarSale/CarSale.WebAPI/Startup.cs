@@ -48,10 +48,12 @@ namespace CarSale.WebAPI
 
 
             // LOGIN AUTHENTICATION
+            //Bytes to generate key for signing JWT tokens
             Byte[] secretBytes = new byte[40];
             Random rand = new Random();
             rand.NextBytes(secretBytes);
 
+            //Adding JWT authentication
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters
@@ -68,16 +70,27 @@ namespace CarSale.WebAPI
             });
 
 
+            //Dependency inject helper class and use with byte array
+            services.AddSingleton<IAuthenticationService>(new AuthenticationService(secretBytes));
+
+
             // SWAGGER
             //To be done
 
 
             // CROSS-ORIGIN RESOURCE SHARING
-            services.AddCors();
+            services.AddCors(options =>
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                    })
+            );
 
-
+            services.AddTransient<IDBInitializer, DBInitializer>();
             services.AddScoped<ICarRepository, CarRepository>();
             services.AddScoped<ICarService, CarService>();
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddControllers();
         }
 
@@ -86,31 +99,26 @@ namespace CarSale.WebAPI
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
                 using (var scope = app.ApplicationServices.CreateScope())
                 {
-                    var ctx = scope.ServiceProvider.GetService<CarSaleContext>();
-                    new DBInitializer().SeedDB(ctx);
-                    //DBInitializer.SeedDB(ctx);
+                    var services = scope.ServiceProvider;
+                    var dbContext = services.GetService<CarSaleContext>();
+                    var dbInitializer = services.GetService<IDBInitializer>();
+                    dbInitializer.SeedDB(dbContext);
                 }
             }
 
-            app.UseCors(builder =>
-            {
-                builder
-                .AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader();
-            });
+            app.UseHttpsRedirection();
+
+
+            app.UseCors();
 
             app.UseAuthentication();
-
-            app.UseHttpsRedirection();
 
             app.UseRouting();
 
             app.UseAuthorization();
-
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

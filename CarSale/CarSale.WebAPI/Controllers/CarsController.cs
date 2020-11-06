@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CarSale.Core.Application_Service.Interface;
 using CarSale.Core.Entity.Entity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CarSale.WebAPI.Controllers
 {
     [Route("api/[controller]")]
+    [Produces("application/json")]
     [ApiController]
     public class CarsController : ControllerBase
     {
@@ -23,6 +25,7 @@ namespace CarSale.WebAPI.Controllers
         }
 
         // GET: api/<CarsController>
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public ActionResult<IEnumerable<Car>> Get()
         {
@@ -30,6 +33,7 @@ namespace CarSale.WebAPI.Controllers
         }
 
         // GET api/<CarsController>/5
+        [Authorize(Roles = "Administrator")]
         [HttpGet("{id}")]
         public ActionResult<Car> Get(int id)
         {
@@ -49,6 +53,7 @@ namespace CarSale.WebAPI.Controllers
         }
 
         // POST api/<CarsController>
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public ActionResult<Car> Post([FromBody] Car car)
         {
@@ -77,6 +82,7 @@ namespace CarSale.WebAPI.Controllers
         }
 
         // PUT api/<CarsController>/5
+        [Authorize(Roles = "Administrator")]
         [HttpPut("{id}")]
         public ActionResult<Car> Put(int id, [FromBody] Car car)
         {
@@ -90,6 +96,7 @@ namespace CarSale.WebAPI.Controllers
         }
 
         // DELETE api/<CarsController>/5
+        [Authorize(Roles = "Administrator")]
         [HttpDelete("{id}")]
         public ActionResult<Car> Delete(int id)
         {
