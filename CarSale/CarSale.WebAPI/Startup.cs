@@ -111,13 +111,19 @@ namespace CarSale.WebAPI
             app.UseHttpsRedirection();
 
 
+            
+
+            
+
+            app.UseRouting();
+
             app.UseCors();
 
             app.UseAuthentication();
 
-            app.UseRouting();
-
             app.UseAuthorization();
+
+            
             
             app.UseEndpoints(endpoints =>
             {

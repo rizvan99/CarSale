@@ -53,7 +53,7 @@ namespace CarSale.WebAPI.Controllers
         }
 
         // POST api/<CarsController>
-        [Authorize]
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public ActionResult<Car> Post([FromBody] Car car)
         {
@@ -82,7 +82,7 @@ namespace CarSale.WebAPI.Controllers
         }
 
         // PUT api/<CarsController>/5
-        [Authorize]
+        [Authorize(Roles = "Administrator")]
         [HttpPut("{id}")]
         public ActionResult<Car> Put(int id, [FromBody] Car car)
         {
@@ -96,7 +96,7 @@ namespace CarSale.WebAPI.Controllers
         }
 
         // DELETE api/<CarsController>/5
-        [Authorize]
+        [Authorize(Roles = "Administrator")]
         [HttpDelete("{id}")]
         public ActionResult<Car> Delete(int id)
         {
