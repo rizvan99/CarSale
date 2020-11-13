@@ -25,7 +25,7 @@ namespace CarSale.WebAPI.Controllers
         }
 
         // GET: api/<CarsController>
-        [Authorize]
+        // Remove to apply authorization[Authorize]
         [HttpGet]
         public ActionResult<IEnumerable<Car>> Get()
         {
@@ -33,7 +33,7 @@ namespace CarSale.WebAPI.Controllers
         }
 
         // GET api/<CarsController>/5
-        [Authorize]
+        // Remove to apply authorization[Authorize]
         [HttpGet("{id}")]
         public ActionResult<Car> Get(int id)
         {
@@ -53,7 +53,7 @@ namespace CarSale.WebAPI.Controllers
         }
 
         // POST api/<CarsController>
-        [Authorize(Roles = "Administrator")]
+        // Remove to apply authorization[Authorize(Roles = "Administrator")]
         [HttpPost]
         public ActionResult<Car> Post([FromBody] Car car)
         {
@@ -82,7 +82,7 @@ namespace CarSale.WebAPI.Controllers
         }
 
         // PUT api/<CarsController>/5
-        [Authorize(Roles = "Administrator")]
+        // Remove to apply authorization[Authorize(Roles = "Administrator")]
         [HttpPut("{id}")]
         public ActionResult<Car> Put(int id, [FromBody] Car car)
         {
@@ -96,7 +96,7 @@ namespace CarSale.WebAPI.Controllers
         }
 
         // DELETE api/<CarsController>/5
-        [Authorize(Roles = "Administrator")]
+        // Remove to apply authorization[Authorize(Roles = "Administrator")]
         [HttpDelete("{id}")]
         public ActionResult<Car> Delete(int id)
         {

@@ -15,7 +15,7 @@ namespace CarSale.Core.Entity.Entity
         public string Brand { get; set; }
 
         //e.g. Sedan, Hatchback, Stationcar, Minivan, Coupe
-        public string Body { get; set; }
+        public BodyType Body { get; set; }
 
         public double Price { get; set; }
 

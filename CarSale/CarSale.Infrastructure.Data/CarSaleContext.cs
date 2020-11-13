@@ -21,6 +21,8 @@ namespace CarSale.Infrastructure.Data
 
         public DbSet<Car> Cars { get; set; }
 
+        public DbSet<BodyType> BodyTypes { get; set; }
+
         public DbSet<User> Users { get; set; }
 
 

@@ -1,5 +1,6 @@
 ﻿using CarSale.Core.Domain_Service.Interface;
 using CarSale.Core.Entity.Entity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,9 +19,18 @@ namespace CarSale.Infrastructure.Data.Repositories
 
         public Car CreateCar(Car car)
         {
-            var newCar = _ctx.Add(car);
+            /* Another way of adding, works too
+            if (car.Body != null)
+            {
+                _ctx.Attach(car.Body);
+            }
+            var newCar = _ctx.Cars.Add(car).Entity;
             _ctx.SaveChanges();
-            return newCar.Entity;
+            return newCar;*/
+
+            _ctx.Attach(car).State = EntityState.Added;
+            _ctx.SaveChanges();
+            return car;
         }
 
         public Car DeleteCar(int id)
@@ -38,7 +48,8 @@ namespace CarSale.Infrastructure.Data.Repositories
 
         public IEnumerable<Car> ReadAllCars()
         {
-            return _ctx.Cars;
+            return _ctx.Cars
+                .AsNoTracking();
         }
 
         public Car ReadCarById(int id)

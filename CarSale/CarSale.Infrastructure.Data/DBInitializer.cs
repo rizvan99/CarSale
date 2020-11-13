@@ -24,8 +24,8 @@ namespace CarSale.Infrastructure.Data
             ctx.Database.EnsureDeleted();
             ctx.Database.EnsureCreated();
 
-            
 
+            #region Users
             //Users
             string password = "1234";
             byte[] passwordHashJoe, passwordSaltJoe, passwordHashAnn, passwordSaltAnn;
@@ -48,12 +48,34 @@ namespace CarSale.Infrastructure.Data
                 }
             };
             ctx.Users.AddRange(users);
+            #endregion
+
+            var hatchback = new BodyType()
+            {
+                Type = "Hatchback"
+            };
+            ctx.BodyTypes.Add(hatchback);
+
+            var sedan = new BodyType()
+            {
+                Type = "Sedan"
+            };
+            ctx.BodyTypes.Add(sedan);
+
+            var minivan = new BodyType()
+            {
+                Type = "Minivan"
+            };
+            ctx.BodyTypes.Add(minivan);
+
+
+
 
             var car1 = new Car()
             {
                 Name = "Golf 3",
                 Brand = "Volkswagen",
-                Body = "Hatchback",
+                Body = hatchback,
                 Color = "Red",
                 ModelYear = DateTime.Now.AddYears(-20),
                 Price = 8000
@@ -65,7 +87,7 @@ namespace CarSale.Infrastructure.Data
             {
                 Name = "Traveller",
                 Brand = "Peugeot",
-                Body = "Minivan",
+                Body = minivan,
                 Color = "Grey",
                 ModelYear = DateTime.Now.AddYears(-1),
                 Price = 32000
@@ -77,7 +99,7 @@ namespace CarSale.Infrastructure.Data
             {
                 Name = "320d",
                 Brand = "BMW",
-                Body = "Sedan",
+                Body = sedan,
                 Color = "Black",
                 ModelYear = DateTime.Now.AddYears(-8),
                 Price = 84000

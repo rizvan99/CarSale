@@ -90,6 +90,8 @@ namespace CarSale.WebAPI
             services.AddTransient<IDBInitializer, DBInitializer>();
             services.AddScoped<ICarRepository, CarRepository>();
             services.AddScoped<ICarService, CarService>();
+            services.AddScoped<IBodyTypeRepository, BodyTypeRepository>();
+            services.AddScoped<IBodyTypeService, BodyTypeService>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddControllers();
         }
@@ -99,6 +101,7 @@ namespace CarSale.WebAPI
         {
             if (env.IsDevelopment())
             {
+                app.UseDeveloperExceptionPage();
                 using (var scope = app.ApplicationServices.CreateScope())
                 {
                     var services = scope.ServiceProvider;
