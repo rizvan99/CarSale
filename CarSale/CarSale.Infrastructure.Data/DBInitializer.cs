@@ -76,6 +76,7 @@ namespace CarSale.Infrastructure.Data
                 Name = "Golf 3",
                 Brand = "Volkswagen",
                 Body = hatchback,
+                BodyId = 1,
                 Color = "Red",
                 ModelYear = DateTime.Now.AddYears(-20),
                 Price = 8000
@@ -88,6 +89,7 @@ namespace CarSale.Infrastructure.Data
                 Name = "Traveller",
                 Brand = "Peugeot",
                 Body = minivan,
+                BodyId = 3,
                 Color = "Grey",
                 ModelYear = DateTime.Now.AddYears(-1),
                 Price = 32000
@@ -100,6 +102,7 @@ namespace CarSale.Infrastructure.Data
                 Name = "320d",
                 Brand = "BMW",
                 Body = sedan,
+                BodyId = 3,
                 Color = "Black",
                 ModelYear = DateTime.Now.AddYears(-8),
                 Price = 84000

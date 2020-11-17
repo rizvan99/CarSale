@@ -49,12 +49,16 @@ namespace CarSale.Infrastructure.Data.Repositories
         public IEnumerable<Car> ReadAllCars()
         {
             return _ctx.Cars
-                .AsNoTracking();
+                .AsNoTracking()
+                .Include(c => c.Body);
         }
 
         public Car ReadCarById(int id)
         {
-            return _ctx.Cars.FirstOrDefault(c => c.Id == id);
+            return _ctx.Cars
+                .AsNoTracking()
+                .Include(c => c.Body)
+                .FirstOrDefault(c => c.Id == id);
         }
 
         public Car UpdateCar(Car carToUpdate)
